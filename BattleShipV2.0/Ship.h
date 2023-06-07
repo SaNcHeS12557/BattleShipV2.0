@@ -8,11 +8,11 @@ using namespace std;
 class Deck {
 private:
 	int row, col;
-	bool isDamaged;
+	bool isDamaged = false;
 
 public:
 	Deck() {};
-	Deck(int row, int col) : row(row), col(col), isDamaged(false) {};
+	Deck(int row, int col) : row(row), col(col) {};
 	int getRow();
 	void setRow(Deck* deck, int row);
 	int getCol();

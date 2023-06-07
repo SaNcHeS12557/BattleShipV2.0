@@ -21,22 +21,26 @@ CellStatus Board::getCellStatus(int row, int column) { // getting status of the 
     return grid[row - 1][column - 1];
 }
 
-vector<Ship> Board::getShipsOnBoard() {
+vector<Ship*> Board::getShipsOnBoard() {
     return shipsOnBoard;
 }
 
-bool Board::hit(Board board, int row, int col) {
-    auto it = find_if(board.shipsOnBoard.begin(), board.shipsOnBoard.end(), [row, col](Ship& ship) {
-        vector<Deck*>& deckStatus = ship.getDeckStatus(); // getting deckStatus from Ship
-        for (Deck* deck : deckStatus) { // finding ship with such row and col
-            if (deck->getRow() == row && deck->getCol() == col) {
+bool Board::hit(int row, int col) {
+    for (Ship* ship : shipsOnBoard) {
+        vector<Deck*>& deckStatus = ship->getDeckStatus(); // getting deckStatus from Ship
+        for (Deck* deck : deckStatus) { 
+            if (deck->getRow() == row && deck->getCol() == col) {// finding ship with such row and col
                 deck->setDamagedStatus(true); // isDamaged = true
-                return true; // the ship was hitted
+                setCellStatus(row, col, CellStatus::HIT); // update cell status on the board
+                return true; // the ship was hit
             }
         }
-        });
+    }
+    setCellStatus(row, col, CellStatus::MISS); // update cell status on the board
     return false; // there are no ships with such row and col coordinates
 }
+
+
 
 ostream& operator<<(ostream& os, const Board& board) {
     // column labels

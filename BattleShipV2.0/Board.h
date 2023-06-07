@@ -12,7 +12,7 @@ class Board {
 private:
 	bool isEnemyBoard; // to detect computers board
 	vector<vector<CellStatus>> grid; // game table R x C
-	vector<Ship> shipsOnBoard; //active ships on the board
+	vector<Ship*> shipsOnBoard; //active ships on the board
 
 public:
 	Board() : grid(10, vector<CellStatus>(10, CellStatus::EMPTY)), isEnemyBoard(false){}; // constructor 10x10 game table
@@ -21,8 +21,8 @@ public:
 
 	void setEnemyStatus(Board *board);
 	bool getEnemyStatus(Board board);
-	vector<Ship> getShipsOnBoard(); 
-	bool hit(Board board, int row, int col);
+	vector<Ship*> getShipsOnBoard(); 
+	bool hit(int row, int col);
 
 	friend class Ship;
 	friend ostream& operator<<(ostream& os, const Board& board);
