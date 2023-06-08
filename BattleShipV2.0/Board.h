@@ -21,10 +21,11 @@ public:
 	CellStatus getCellStatus(int row, int column);//
 	void setEnemyStatus(Board *board);
 	bool getEnemyStatus(Board board);
-	vector<Ship*> getShipsOnBoard(); 
+	vector<Ship*>& getShipsOnBoard();
 	int getShipsCounter();
 	void decrementShipsCounter();
 	Ship* hit(int row, int col);
+	void removeSunkShips();
 
 	friend class Ship;
 	friend ostream& operator<<(ostream& os, const Board& board);

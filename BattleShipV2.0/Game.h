@@ -19,6 +19,8 @@ public:
 	Game();
 	~Game();
 	void Play();
+	bool checkGameLost();
+	bool checkGameWin();
 	void saveGame();
 	void loadGame();
 

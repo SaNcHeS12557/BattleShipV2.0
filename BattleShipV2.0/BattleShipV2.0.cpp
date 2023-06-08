@@ -49,7 +49,8 @@ int main()
 
 
 
-
+	//Board grid;
+	//Board computer;
 	//vector<Ship*> shipsPack;
 	//shipsPack.push_back(new Destroyer);
 	//shipsPack.push_back(new Cruiser);

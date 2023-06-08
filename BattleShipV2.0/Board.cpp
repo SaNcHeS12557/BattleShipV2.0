@@ -25,7 +25,7 @@ CellStatus Board::getCellStatus(int row, int column) { // getting status of the 
 	return grid[row - 1][column - 1];
 }
 
-vector<Ship*> Board::getShipsOnBoard() {
+vector<Ship*>& Board::getShipsOnBoard() {
 	return shipsOnBoard;
 }
 
@@ -54,6 +54,18 @@ int Board::getShipsCounter() {
 }
 void Board::decrementShipsCounter() {
 	shipsCounter--;
+}
+
+void Board::removeSunkShips() {
+	vector<Ship*>& shipsOnBoard = getShipsOnBoard();
+	for (auto it = shipsOnBoard.begin(); it != shipsOnBoard.end();) {
+		if ((*it)->isSunk()) {
+			it = shipsOnBoard.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
 }
 
 

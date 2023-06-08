@@ -78,27 +78,96 @@ void Game::Play() {
 	botBoard.setEnemyStatus(&botBoard);
 	for (int i = 0; i < botShips.size(); i++) {
 		srand(time(nullptr)); // to generate new boards every play()
-		while (botShips[i]->getPlacedStatus() != true) { 
-			int row = rand() % 10;
-			int col = rand() % 10;
-			bool horizontal = rand() % 2 == 0;
-			botShips[i]->placeShip(row+1, col+1, botShips[i], &botBoard, horizontal);
+		while (botShips[i]->getPlacedStatus() != true) {
+			row = rand() % 10;
+			col = rand() % 10;
+			horizontal = rand() % 2 == 0;
+			botShips[i]->placeShip(row + 1, col + 1, botShips[i], &botBoard, horizontal);
 		}
 	}
-	cout << playerBoard;
-	cout << botBoard;
+	while (true)
+	{
+		//players moves
+		system("cls");
+		cout << playerBoard;
+		cout << botBoard;
+
+		cout << "Enter col and row to shoot - '1a': ";
+		cin >> row >> col;
+		col = toupper(col);
+
+		Ship* shipHitted = botBoard.hit(row, col - 64);
+		if (shipHitted != nullptr && shipHitted->isSunk()) {
+			vector<Deck*>& deckStatus = shipHitted->getDeckStatus();
+			for (Deck* deck : deckStatus) {
+				int row = deck->getRow();
+				int col = deck->getCol();
+				for (int i = row - 1; i <= row + 1; ++i) {
+					for (int j = col - 1; j <= col + 1; ++j) {
+						if (i >= 1 && i <= 10 && j >= 1 && j <= 10 && botBoard.getCellStatus(i, j) != CellStatus::HIT) {
+							botBoard.setCellStatus(i, j, CellStatus::MISS);
+						}
+					}
+				}
+			}
+			botBoard.decrementShipsCounter(); // if the ship isSunk() -1 ship
+			botBoard.removeSunkShips(); // removing sunk ships from shipsOnBoard vector
+		}
+		system("cls");
+		cout << playerBoard;
+		cout << botBoard;
+		if (checkGameWin() == true) {
+			break;
+		}
+
+
+
+		//bots moves
+		row = rand() % 9;
+		col = rand() % 9;
+		shipHitted = playerBoard.hit(row+1, col+1); //getting hitted ship
+		if (shipHitted != nullptr && shipHitted->isSunk()) { // if the ship was hitted and sunk
+			vector<Deck*>& deckStatus = shipHitted->getDeckStatus(); //getting ships decks
+			for (Deck* deck : deckStatus) {
+				int row = deck->getRow();
+				int col = deck->getCol();
+				for (int i = row - 1; i <= row + 1; ++i) {
+					for (int j = col - 1; j <= col + 1; ++j) {
+						if (i >= 1 && i <= 10 && j >= 1 && j <= 10 && playerBoard.getCellStatus(i, j) != CellStatus::HIT) {
+							playerBoard.setCellStatus(i, j, CellStatus::MISS);
+						}
+					}
+				}
+			}
+			playerBoard.decrementShipsCounter(); // if the ship isSunk() -1 ship
+			playerBoard.removeSunkShips(); // removing sunk ships from shipsOnBoard vector
+		}
+		system("cls");
+		cout << playerBoard;
+		cout << botBoard;
+		if (checkGameLost() == true) {
+			break;
+		}
+	}
 }
 
 
-bool checkGameLost() {
-
-	return true;
+bool Game::checkGameLost() {
+	if(playerBoard.getShipsOnBoard().size()==0)
+		return true;
+	return false;
 }
 
-void saveGame() {
+bool Game::checkGameWin() {
+	if (botBoard.getShipsOnBoard().size() == 0)
+		return true;
+	return false;
+}
+
+void Game::saveGame() {
 
 }
 
-void loadGame() {
+void Game::loadGame() {
 
 }
