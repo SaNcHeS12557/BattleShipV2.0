@@ -22,7 +22,7 @@ public:
 	void setEnemyStatus(Board *board);
 	bool getEnemyStatus(Board board);
 	vector<Ship*> getShipsOnBoard(); 
-	bool hit(int row, int col);
+	Ship* hit(int row, int col);
 
 	friend class Ship;
 	friend ostream& operator<<(ostream& os, const Board& board);

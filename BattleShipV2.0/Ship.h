@@ -26,7 +26,7 @@ public:
 class Ship : public	Deck
 {
 private:
-	string type; // type of ship
+	string type; // name of ship
 	int size;
 	vector<Deck*> deckStatus;
 
@@ -34,6 +34,7 @@ public:
 	Ship(int size, string type);
 	~Ship();
 	vector<Deck*>& getDeckStatus();
+	string getShipType();
 	void placeShip(int row, int col, Ship* ship, Board* board, bool horizontal);
 	bool isSunk();
 

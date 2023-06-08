@@ -56,6 +56,10 @@ vector<Deck*>& Ship::getDeckStatus() {
 	return deckStatus;
 }
 
+string Ship::getShipType() {
+	return type;
+}
+
 void Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal) {
 
 	vector<Ship*> shipsOnBoard = board->getShipsOnBoard(); // getting boards ships vector
@@ -100,12 +104,12 @@ void Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal
 		for (int i = row; i < row + ship->size; ++i) {
 			board->grid[i - 1][col - 1] = CellStatus::SHIP;
 		}
-	}
-	for (int i = 0; i < ship->size; i++)
-	{
-		ship->deckStatus[i]->setRow(deckStatus[i], row + i);
-		ship->deckStatus[i]->setCol(deckStatus[i], col);
+		for (int i = 0; i < ship->size; i++)
+		{
+			ship->deckStatus[i]->setRow(deckStatus[i], row + i);
+			ship->deckStatus[i]->setCol(deckStatus[i], col);
 
+		}
 	}
 
 	board->shipsOnBoard.push_back(ship); // adding ship to shipsOnBoard vector
