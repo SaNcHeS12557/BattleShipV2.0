@@ -39,7 +39,8 @@ public:
 	void placeShip(int row, int col, Ship* ship, Board* board, bool horizontal);
 	bool isSunk();
 	bool getPlacedStatus();
-	void setPlacedStatus();
+	void setPlacedStatus(bool status);
+	int getShipSize();
 
 
 	friend class Destroyer;

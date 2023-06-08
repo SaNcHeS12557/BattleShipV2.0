@@ -60,10 +60,10 @@ void Board::decrementShipsCounter() {
 ostream& operator<<(ostream& os, const Board& board) {
 	// display player label
 	if (board.isEnemyBoard == false) {
-		cout << "\033[1mYour Board:\033[0m\n"<<endl;
+		cout << "\033[1mYour Board:\033[0m\n";
 	}
 	else {
-		cout << "\033[1mEnemy Board:\033[0m\n" << endl;
+		cout << "\033[1mEnemy Board:\033[0m\n";
 	}
 
 	// statistic

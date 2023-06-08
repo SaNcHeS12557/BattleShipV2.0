@@ -64,16 +64,20 @@ bool Ship::getPlacedStatus() {
 	return isPlaced;
 }
 
-void Ship::setPlacedStatus() {
-	isPlaced = true;
+void Ship::setPlacedStatus(bool status) {
+	isPlaced = status;
 }
 
-bool Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal) {
+int Ship::getShipSize() {
+	return size;
+}
+
+void Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal) {
 
 	vector<Ship*> shipsOnBoard = board->getShipsOnBoard(); // getting boards ships vector
 
 	if ((horizontal && col + ship->size > 11) || (!horizontal && row + ship->size > 11)) { // checking if there are enough space for the ship
-		cout << "You can't place the ship here!\n" << endl;
+		ship->setPlacedStatus(false);
 		return;
 	}
 
@@ -83,7 +87,7 @@ bool Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal
 			for (int j = col - 1; j <= col + ship->size + 1; ++j) {
 				if (i >= 1 && i <= 10 && j >= 1 && j <= 10) {
 					if (board->grid[i - 1][j - 1] == CellStatus::SHIP) {
-						cout << "There is a ship nearby. Choose another place!\n" << endl;
+						ship->setPlacedStatus(false);
 						return; // TODO: cancelling the remove function from vector / repeat the place attempt 
 					}
 				}
@@ -103,7 +107,7 @@ bool Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal
 			for (int j = col - 1; j <= col + 1; ++j) {
 				if (i >= 1 && i <= 10 && j >= 1 && j <= 10) {
 					if (board->grid[i - 1][j - 1] == CellStatus::SHIP) {
-						cout << "There is a ship nearby. Choose another place!\n" << endl;
+						ship->setPlacedStatus(false);
 						return; // TODO: cancelling the remove function from vector / repeat the place attempt 
 					}
 				}
@@ -119,7 +123,7 @@ bool Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal
 
 		}
 	}
-	ship->isPlaced = true;
+	ship->setPlacedStatus(true);
 	board->shipsOnBoard.push_back(ship); // adding ship to shipsOnBoard vector
 	board->shipsCounter++;
 }
