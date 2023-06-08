@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 
-
 using namespace std;
 
 class Deck {
@@ -20,6 +19,7 @@ public:
 	bool setDamagedStatus(bool hit);
 	bool getDamagedStatus();
 
+
 	friend class Board;
 };
 
@@ -29,6 +29,7 @@ private:
 	string type; // name of ship
 	int size;
 	vector<Deck*> deckStatus;
+	bool isPlaced;
 
 public:
 	Ship(int size, string type);
@@ -37,6 +38,8 @@ public:
 	string getShipType();
 	void placeShip(int row, int col, Ship* ship, Board* board, bool horizontal);
 	bool isSunk();
+	bool getPlacedStatus();
+	void setPlacedStatus();
 
 
 	friend class Destroyer;

@@ -7,6 +7,10 @@ using namespace std;
 #include"Board.h"
 #include"Ship.h"
 
+Board::Board() : grid(10, vector<CellStatus>(10, CellStatus::EMPTY)), isEnemyBoard(false), shipsCounter(0) {
+	shipsCounter = 0;
+}
+
 void Board::setEnemyStatus(Board* board) {
 	board->isEnemyBoard = true;
 }
@@ -24,21 +28,6 @@ CellStatus Board::getCellStatus(int row, int column) { // getting status of the 
 vector<Ship*> Board::getShipsOnBoard() {
 	return shipsOnBoard;
 }
-
-//bool Board::hit(int row, int col) {
-//    for (Ship* ship : shipsOnBoard) {
-//        vector<Deck*>& deckStatus = ship->getDeckStatus(); // getting deckStatus from Ship
-//        for (Deck* deck : deckStatus) { 
-//            if (deck->getRow() == row && deck->getCol() == col) {// finding ship with such row and col
-//                deck->setDamagedStatus(true); // isDamaged = true
-//                setCellStatus(row, col, CellStatus::HIT); // update cell status on the board
-//                return true; // the ship was hit
-//            }
-//        }
-//    }
-//    setCellStatus(row, col, CellStatus::MISS); // update cell status on the board
-//    return false; // there are no ships with such row and col coordinates
-//}
 
 Ship* Board::hit(int row, int col) {
 	if (grid[row - 1][col - 1] == CellStatus::HIT || grid[row - 1][col - 1] == CellStatus::MISS)
@@ -60,9 +49,27 @@ Ship* Board::hit(int row, int col) {
 
 
 }
+int Board::getShipsCounter() {
+	return shipsCounter;
+}
+void Board::decrementShipsCounter() {
+	shipsCounter--;
+}
+
 
 ostream& operator<<(ostream& os, const Board& board) {
-	// column labels
+	// display player label
+	if (board.isEnemyBoard == false) {
+		cout << "\033[1mYour Board:\033[0m\n"<<endl;
+	}
+	else {
+		cout << "\033[1mEnemy Board:\033[0m\n" << endl;
+	}
+
+	// statistic
+	cout << "\033[4mShips: "<< board.shipsCounter << "\033[0m";
+	cout<<endl;
+	// display column labels
 	os << "   ";
 	for (char col = 'A'; col <= 'J'; col++) {
 		os << col << " ";
@@ -71,7 +78,7 @@ ostream& operator<<(ostream& os, const Board& board) {
 
 	int i = 1;
 	for (auto row : board.grid) {
-		os << setw(2) << i++ << " "; // row labels
+		os << setw(2) << i++ << " "; // display row labels
 		for (auto cell : row) {
 			switch (cell) {
 			case CellStatus::EMPTY:

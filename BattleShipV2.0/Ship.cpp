@@ -6,7 +6,7 @@ using namespace std;
 #include "Ship.h"
 #include "Board.h"
 
-Ship::Ship(int size, string type) : size(size), type(type) {}
+Ship::Ship(int size, string type) : size(size), type(type), isPlaced(false) {}
 
 Destroyer::Destroyer() : Ship(4, "Destroyer") {
 	for (int i = 0; i < size; i++) {
@@ -60,7 +60,15 @@ string Ship::getShipType() {
 	return type;
 }
 
-void Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal) {
+bool Ship::getPlacedStatus() {
+	return isPlaced;
+}
+
+void Ship::setPlacedStatus() {
+	isPlaced = true;
+}
+
+bool Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal) {
 
 	vector<Ship*> shipsOnBoard = board->getShipsOnBoard(); // getting boards ships vector
 
@@ -111,11 +119,10 @@ void Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal
 
 		}
 	}
-
+	ship->isPlaced = true;
 	board->shipsOnBoard.push_back(ship); // adding ship to shipsOnBoard vector
-
+	board->shipsCounter++;
 }
-
 
 bool Ship::isSunk() {
 	for (Deck* deck : deckStatus) {
