@@ -18,7 +18,7 @@ private:
 public:
 	Game();
 	~Game();
-	void Play();
+	void Play(bool isLoadPlay);
 	bool checkGameLost();
 	bool checkGameWin();
 	void saveGame();

@@ -30,6 +30,7 @@ private:
 	int size;
 	vector<Deck*> deckStatus;
 	bool isPlaced;
+	bool isHorizontal;
 
 public:
 	Ship(int size, string type);
@@ -41,6 +42,8 @@ public:
 	bool getPlacedStatus();
 	void setPlacedStatus(bool status);
 	int getShipSize();
+	bool getIsHorizontal();
+	void setHorizontalStatus(bool orientation);
 
 
 	friend class Destroyer;

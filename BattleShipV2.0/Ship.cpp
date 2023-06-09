@@ -72,9 +72,18 @@ int Ship::getShipSize() {
 	return size;
 }
 
+bool Ship::getIsHorizontal() {
+	return isHorizontal;
+}
+
+void Ship::setHorizontalStatus(bool orientation) {
+	isHorizontal = orientation;
+}
+
 void Ship::placeShip(int row, int col, Ship* ship, Board* board, bool horizontal) {
 
 	vector<Ship*> shipsOnBoard = board->getShipsOnBoard(); // getting boards ships vector
+	ship->setHorizontalStatus(horizontal);
 
 	if ((horizontal && col + ship->size > 11) || (!horizontal && row + ship->size > 11)) { // checking if there are enough space for the ship
 		ship->setPlacedStatus(false);
@@ -136,8 +145,6 @@ bool Ship::isSunk() {
 	}
 	return true;
 }
-
-
 
 Ship::~Ship() {
 

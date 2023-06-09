@@ -49,6 +49,7 @@ Ship* Board::hit(int row, int col) {
 
 
 }
+
 int Board::getShipsCounter() {
 	return shipsCounter;
 }
@@ -68,6 +69,9 @@ void Board::removeSunkShips() {
 	}
 }
 
+vector<vector<CellStatus>> Board::getGrid() {
+	return grid;
+}
 
 ostream& operator<<(ostream& os, const Board& board) {
 	// display player label
@@ -90,7 +94,8 @@ ostream& operator<<(ostream& os, const Board& board) {
 
 	int i = 1;
 	for (auto row : board.grid) {
-		os << setw(2) << i++ << " "; // display row labels
+		// display row labels
+		os << setw(2) << i++ << " ";
 		for (auto cell : row) {
 			switch (cell) {
 			case CellStatus::EMPTY:

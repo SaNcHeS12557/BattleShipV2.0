@@ -26,6 +26,7 @@ public:
 	void decrementShipsCounter();
 	Ship* hit(int row, int col);
 	void removeSunkShips();
+	vector<vector<CellStatus>> getGrid();
 
 	friend class Ship;
 	friend ostream& operator<<(ostream& os, const Board& board);
