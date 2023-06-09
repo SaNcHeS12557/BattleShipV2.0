@@ -17,6 +17,7 @@ private:
 
 public:
 	Board(); // constructor 10x10 game table
+	~Board();
 	void setCellStatus(int row, int column, CellStatus status);//
 	CellStatus getCellStatus(int row, int column);//
 	void setEnemyStatus(Board *board);
@@ -27,6 +28,7 @@ public:
 	Ship* hit(int row, int col);
 	void removeSunkShips();
 	vector<vector<CellStatus>> getGrid();
+	void destroyAllBoard(); // made only for test
 
 	friend class Ship;
 	friend ostream& operator<<(ostream& os, const Board& board);

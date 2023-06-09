@@ -3,11 +3,14 @@
 #include<fstream>
 #include<string>
 #include <sstream>
+#include <cstdlib>
 
 using namespace std;
 
 #include "Game.h"
 #include "Menu.h"
+
+Menu menu;
 
 Game::Game() {
 	// player ships pack
@@ -65,9 +68,13 @@ void Game::Play(bool isLoadPlay) {
 			cout << playerBoard;
 			while (playerShips[i]->getPlacedStatus() != true)
 			{
-				cout << "Place your " << playerShips[i]->getShipType() << "(\033[32m" << playerShips[i]->getShipSize() << "\033[0m)\n" << "\nEnter row(1-10) and column(A-J) - '1a': ";
-				cin >> row >> col;
-				col = toupper(col);
+				cout << "Place your " << playerShips[i]->getShipType() << "(\033[32m" << playerShips[i]->getShipSize() << "\033[0m)\n" << "\n";
+				do
+				{
+					cout << "Enter row(1-10) and column(A-J) - '1a': ";
+					cin >> row >> col; 
+					col = toupper(col);
+				} while (row<1 || row>10 || col < 'A' || col>'J');
 				cout << "Horizontal?\n\033[32m1.YES \033[0m/\033[31m 2.NO\033[0m\n";
 				cin >> choice;
 				switch (choice)
@@ -99,9 +106,11 @@ void Game::Play(bool isLoadPlay) {
 			}
 		}
 
-		cout << "Do you want to save your && computer's loadouts?\n1. Yes (return to Menu)\n2. Yes (continue the game)\n3. No (return to Menu)\n4.No (continue the game)";
+		cout << "\033[1m\033[1;36m======================================================\n";
+		cout << "Do you want to save your && computer's loadouts?\n";
+		cout << "======================================================\033[0m\n";
+		cout<< "1.\033[32m Yes \033[33m(return to Menu)\033[0m\n2.\033[32m Yes \033[33m(continue the game)\033[0m\n3.\033[31m No \033[33m(return to Menu)\033[0m\n4. \033[31mNo \033[33m(continue the game)\033[0m\nEnter your choise: ";
 		bool exitMenu = false;
-		Menu menu;
 		do
 		{
 			cin >> choice;
@@ -143,16 +152,17 @@ void Game::Play(bool isLoadPlay) {
 		system("cls");
 		cout << playerBoard;
 		cout << botBoard;
+
 		Ship* shipHitted; //get hitted ship
 		do
 		{
-			cout << "Enter col and row to shoot - '1a': ";
 			do
 			{
+				cout << "Enter col and row to shoot - '1a': ";
 				cin >> row >> col;
 				col = toupper(col);
 
-			} while (botBoard.getCellStatus(row, col - 64) == CellStatus::HIT || botBoard.getCellStatus(row, col - 64) == CellStatus::MISS);
+			} while (row < 1 || row < 1 || row>10 || col < 'A' || col>'J' || botBoard.getCellStatus(row, col - 64) == CellStatus::HIT || botBoard.getCellStatus(row, col - 64) == CellStatus::MISS);
 			shipHitted = botBoard.hit(row, col - 64);
 			if (shipHitted != nullptr && shipHitted->isSunk()) {
 				vector<Deck*>& deckStatus = shipHitted->getDeckStatus();
@@ -174,7 +184,27 @@ void Game::Play(bool isLoadPlay) {
 			cout << playerBoard;
 			cout << botBoard;
 			if (checkGameWin() == true) {
-				break;
+				system("cls");
+				cout << "\033[1m\033[32m===========================	\n";
+				cout << "	 YOU WIN     \n";
+				cout << "===========================\033[0m\n";
+				do
+				{
+					cout << "What do you want to do next?\n1.\033[1;33mMenu\033[0m\n2.\033[1;33mExit Game\033[0m\nEnter your choise: ";
+					cin >> choice;
+					switch (choice)
+					{
+					case 1:
+						menu.showMenu();
+						break;
+					case 2:
+						cout << "Exiting the game...\n";
+						exit(0);
+					default:
+						cout << "Please choose 1-2!\n";
+						break;
+					}
+				} while (true);
 			}
 		} while (shipHitted != nullptr);
 
@@ -187,7 +217,7 @@ void Game::Play(bool isLoadPlay) {
 				row = rand() % 9;
 				col = rand() % 9;
 
-			} while (botBoard.getCellStatus(row+1, col+1) == CellStatus::HIT || botBoard.getCellStatus(row+1, col+1) == CellStatus::MISS);
+			} while (botBoard.getCellStatus(row + 1, col + 1) == CellStatus::HIT || botBoard.getCellStatus(row + 1, col + 1) == CellStatus::MISS);
 			shipHitted = playerBoard.hit(row + 1, col + 1); //getting hitted ship
 			if (shipHitted != nullptr && shipHitted->isSunk()) { // if the ship was hitted and sunk
 				vector<Deck*>& deckStatus = shipHitted->getDeckStatus(); //getting ships decks
@@ -209,7 +239,27 @@ void Game::Play(bool isLoadPlay) {
 			cout << playerBoard;
 			cout << botBoard;
 			if (checkGameLost() == true) {
-				break;
+				system("cls");
+				cout << "\033[1m\033[31m===========================	\n";
+				cout << "         YOU LOST     \n";
+				cout << "===========================\033[0m\n";
+				do
+				{
+					cout << "What do you want to do next?\n1.\033[1;33mMenu\033[0m\n2.\033[1;33mExit Game\033[0m\nEnter your choise: ";
+					cin >> choice;
+					switch (choice)
+					{
+					case 1:
+						menu.showMenu();
+						break;
+					case 2:
+						cout << "Exiting the game...\n";
+						exit(0);
+					default:
+						cout << "Please choose 1-2!\n";
+						break;
+					}
+				} while (true);
 			}
 		} while (shipHitted != nullptr);
 
@@ -217,15 +267,33 @@ void Game::Play(bool isLoadPlay) {
 }
 
 bool Game::checkGameLost() {
-	if (playerBoard.getShipsOnBoard().size() == 0)
-		return true;
-	return false;
+	vector<Ship*> shipsOnBoard = playerBoard.getShipsOnBoard();
+	for (auto ship : shipsOnBoard) {
+		for (int i = 0; i < ship->getShipSize(); i++)
+		{
+			if (ship->getDeckStatus()[i]->getDamagedStatus() == false)
+				return false;
+		}
+	}
+	return true;
+	//if (playerBoard.getShipsOnBoard().size() == 0)
+	//	return true;
+	//return false;
 }
 
 bool Game::checkGameWin() {
-	if (botBoard.getShipsOnBoard().size() == 0)
-		return true;
-	return false;
+	vector<Ship*> shipsOnBoard = botBoard.getShipsOnBoard();
+	for (auto ship : shipsOnBoard) {
+		for (int i = 0; i < ship->getShipSize(); i++)
+		{
+			if (ship->getDeckStatus()[i]->getDamagedStatus() == false)
+				return false;
+		}
+	}
+	return true;
+	//if (botBoard.getShipsOnBoard().size() == 0)
+	//	return true;
+	//return false;
 }
 
 void Game::saveGame() {

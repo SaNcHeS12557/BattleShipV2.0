@@ -11,6 +11,22 @@ Board::Board() : grid(10, vector<CellStatus>(10, CellStatus::EMPTY)), isEnemyBoa
 	shipsCounter = 0;
 }
 
+Board::~Board() {
+	for (Ship* ship : shipsOnBoard) {
+		delete ship;
+	}
+}
+
+void Board::destroyAllBoard()
+{
+	for (int i = 1; i <= 10; i++) {
+		for (int j = 1; j <= 10; j++)
+		{
+			hit(i, j);
+		}
+	}
+}
+
 void Board::setEnemyStatus(Board* board) {
 	board->isEnemyBoard = true;
 }

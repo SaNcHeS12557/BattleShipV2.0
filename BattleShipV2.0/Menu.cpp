@@ -9,6 +9,7 @@ void Menu::showMenu() {
 	Game game;
 
 	while (true) {
+		system("cls");
 		cout << "\033[1m\033[1;36m===========================	\n";
 		cout << "     BATTLESHIP MENU     \n";
 		cout << "===========================\033[0m\n";
@@ -30,7 +31,7 @@ void Menu::showMenu() {
 		}
 		case 3: {
 			cout << "Exiting the game...\n";
-			return;
+			exit(0);
 		}
 		default: {
 			cout << "Invalid choice. Please try again!\n";

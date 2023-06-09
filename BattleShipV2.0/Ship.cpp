@@ -147,5 +147,7 @@ bool Ship::isSunk() {
 }
 
 Ship::~Ship() {
-
+	for (Deck* deck : deckStatus) {
+		delete deck;
+	}
 }
