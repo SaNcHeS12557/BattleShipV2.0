@@ -2,6 +2,7 @@
 #include <vector>
 #include<fstream>
 #include<string>
+#include <sstream>
 
 using namespace std;
 
@@ -51,6 +52,11 @@ void Game::Play(bool isLoadPlay) {
 	bool horizontal;
 	if (isLoadPlay == true) {
 		loadGame();
+		if (loadGame() == false) {
+			system("cls");
+			cout << "\033[31mYou don't have any saves. Please create the new game!\033[0m\n\n";
+			return;
+		}
 	}
 	else {
 		// players board
@@ -59,10 +65,10 @@ void Game::Play(bool isLoadPlay) {
 			cout << playerBoard;
 			while (playerShips[i]->getPlacedStatus() != true)
 			{
-				cout << "Place your " << playerShips[i]->getShipType() << "(" << playerShips[i]->getShipSize() << ")\n" << "\nEnter row(1-10) and column(A-J) - '1a': ";
+				cout << "Place your " << playerShips[i]->getShipType() << "(\033[32m" << playerShips[i]->getShipSize() << "\033[0m)\n" << "\nEnter row(1-10) and column(A-J) - '1a': ";
 				cin >> row >> col;
 				col = toupper(col);
-				cout << "Horizontal?\n1.YES / 2.NO\n";
+				cout << "Horizontal?\n\033[32m1.YES \033[0m/\033[31m 2.NO\033[0m\n";
 				cin >> choice;
 				switch (choice)
 				{
@@ -93,32 +99,43 @@ void Game::Play(bool isLoadPlay) {
 			}
 		}
 
-		cout << "Do you want to save your && computer's loadouts?\n1. Yes\n2. No\n3. Menu\n4. Start Game\n";
+		cout << "Do you want to save your && computer's loadouts?\n1. Yes (return to Menu)\n2. Yes (continue the game)\n3. No (return to Menu)\n4.No (continue the game)";
+		bool exitMenu = false;
+		Menu menu;
 		do
 		{
 			cin >> choice;
 			switch (choice)
 			{
 			case 1:
+				// save with return
 				saveGame();
+				system("cls");
+				menu.showMenu();
+				exitMenu = true;
 				break;
 			case 2:
-				// nothing to copy
+				// save with continue
+				saveGame();
+				exitMenu = true;
 				break;
 			case 3:
 				//return to menu
 				system("cls");
-				Menu menu;
 				menu.showMenu();
+				exitMenu = true;
+				break;
+			case 4:
+				// continue the game
+				exitMenu = true;
 				break;
 			default:
 				cout << "Please select 1-4:\n";
 				break;
 			}
-		} while (true);
+		} while (!exitMenu);
 
 	}
-
 
 	while (true)
 	{
@@ -131,7 +148,8 @@ void Game::Play(bool isLoadPlay) {
 		cin >> row >> col;
 		col = toupper(col);
 
-		Ship* shipHitted = botBoard.hit(row, col - 64);
+		Ship* shipHitted = botBoard.hit(row, col - 64); //get hitted ship
+		
 		if (shipHitted != nullptr && shipHitted->isSunk()) {
 			vector<Deck*>& deckStatus = shipHitted->getDeckStatus();
 			for (Deck* deck : deckStatus) {
@@ -201,17 +219,16 @@ bool Game::checkGameWin() {
 void Game::saveGame() {
 	ofstream file("savegame.txt");
 	if (!file) {
-		cout << "Error: Unable to create save file." << endl;
-		return;
+		cout << "Hmm... you can't create a savegame file :( " << endl;
 	}
 
-	// Save player ships
+	// save player ships
 	file << "Player Ships:" << endl;
 	for (Ship* ship : playerShips) {
 		file << ship->getDeckStatus()[0]->getRow() << " " << ship->getDeckStatus()[0]->getCol() << " " << ship->getIsHorizontal() << endl;
 	}
 
-	// Save bot ships
+	// save bot ships
 	file << "Bot Ships:" << endl;
 	for (Ship* ship : botShips) {
 		file << ship->getDeckStatus()[0]->getRow() << " " << ship->getDeckStatus()[0]->getCol() << " " << ship->getIsHorizontal() << endl;
@@ -220,6 +237,45 @@ void Game::saveGame() {
 	file.close();
 }
 
-void Game::loadGame() {
+bool Game::loadGame() {
+	ifstream file("savegame.txt");
+	if (!file) {
+		cout << "You can't load the savegame file!" << endl;
+		return false;
+	}
 
+	int row, col, i = 0;
+	bool horizontal;
+	string line;
+
+	while (getline(file, line)) {
+		if (line == "Player Ships:") {
+			while (getline(file, line) && line != "Bot Ships:") {
+				istringstream iss(line);
+				if (iss >> row >> col >> horizontal) {
+					if (i < playerShips.size()) {
+						playerShips[i]->placeShip(row, col, playerShips[i], &playerBoard, horizontal);
+					}
+				}
+				i++;
+			}
+		}
+		if (line == "Bot Ships:") {
+			i = 0;
+			botBoard.setEnemyStatus(&botBoard);
+			while (getline(file, line)) {
+				istringstream iss(line);
+				if (iss >> row >> col >> horizontal) {
+					if (i < botShips.size()) {
+						botShips[i]->placeShip(row, col, botShips[i], &botBoard, horizontal);
+					}
+				}
+				i++;
+			}
+		}
+
+	}
+
+	file.close();
+	return true;
 }

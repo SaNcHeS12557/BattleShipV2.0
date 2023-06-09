@@ -6,23 +6,25 @@ using namespace std;
 
 void Menu::showMenu() {
 	int choice;
+	Game game;
 
 	while (true) {
-		cout << "===== BATTLESHIP MENU =====\n";
-		cout << "1. Start New Game\n";
-		cout << "2. Start with Previous Save\n";
-		cout << "3. Exit\n";
-		cout << "Enter your choice: ";
+		cout << "\033[1m\033[1;36m===========================	\n";
+		cout << "     BATTLESHIP MENU     \n";
+		cout << "===========================\033[0m\n";
+		cout << "1. \033[1;33mCreate New Game\033[0m\n";
+		cout << "2. \033[1;33mStart with Previous Save\033[0m\n";
+		cout << "3. \033[1;33mExit\033[0m\n";
+		cout << "Enter your choice:\033[32m ";
 		cin >> choice;
+		cout << "\033[0m\n";
 
 		switch (choice) {
 		case 1: {
-			Game game;
 			game.Play(false);
 			break;
 		}
 		case 2: {
-			Game game;
 			game.Play(true);
 			break;
 		}

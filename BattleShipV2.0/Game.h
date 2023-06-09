@@ -22,7 +22,7 @@ public:
 	bool checkGameLost();
 	bool checkGameWin();
 	void saveGame();
-	void loadGame();
+	bool loadGame();
 
 };
 

@@ -76,10 +76,10 @@ vector<vector<CellStatus>> Board::getGrid() {
 ostream& operator<<(ostream& os, const Board& board) {
 	// display player label
 	if (board.isEnemyBoard == false) {
-		cout << "\033[1mYour Board:\033[0m\n";
+		cout << "\033[32m\033[1mYour Board:\033[0m\n";
 	}
 	else {
-		cout << "\033[1mEnemy Board:\033[0m\n";
+		cout << "\033[31m\033[1mEnemy Board:\033[0m\n";
 	}
 
 	// statistic
