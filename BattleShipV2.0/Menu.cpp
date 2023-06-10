@@ -7,9 +7,8 @@ using namespace std;
 void Menu::showMenu() {
 	int choice;
 	Game game;
-
+	system("cls");
 	while (true) {
-		system("cls");
 		cout << "\033[1m\033[1;36m===========================	\n";
 		cout << "     BATTLESHIP MENU     \n";
 		cout << "===========================\033[0m\n";
@@ -34,7 +33,8 @@ void Menu::showMenu() {
 			exit(0);
 		}
 		default: {
-			cout << "Invalid choice. Please try again!\n";
+			system("cls");
+			cout << "\033[31mInvalid choice. Please try again!\033[0m\n\n";
 			break;
 		}
 		}

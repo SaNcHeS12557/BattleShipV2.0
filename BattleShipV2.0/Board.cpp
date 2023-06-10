@@ -17,6 +17,22 @@ Board::~Board() {
 	}
 }
 
+void Board::clearGrid()
+{
+	for (int row = 0; row < grid.size(); ++row) {
+		for (int column = 0; column < grid[row].size(); ++column) {
+			setCellStatus(row + 1, column + 1, CellStatus::EMPTY);
+		}
+	}
+
+	shipsOnBoard.clear();
+}
+
+void Board::clearShipsCounter()
+{
+	shipsCounter = 0;
+}
+
 void Board::destroyAllBoard()
 {
 	for (int i = 1; i <= 10; i++) {

@@ -7,7 +7,6 @@ using namespace std;
 
 int main()
 {
-	Game game;
 	Menu menu;
 
 	menu.showMenu();

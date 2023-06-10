@@ -54,45 +54,124 @@ void Game::Play(bool isLoadPlay) {
 	char col;
 	bool horizontal;
 	if (isLoadPlay == true) {
-		loadGame();
 		if (loadGame() == false) {
 			system("cls");
 			cout << "\033[31mYou don't have any saves. Please create the new game!\033[0m\n\n";
 			return;
 		}
+		loadGame();
 	}
 	else {
 		// players board
-		system("cls");
-		for (int i = 0; i < playerShips.size(); i++) {
-			cout << playerBoard;
-			while (playerShips[i]->getPlacedStatus() != true)
-			{
-				cout << "Place your " << playerShips[i]->getShipType() << "(\033[32m" << playerShips[i]->getShipSize() << "\033[0m)\n" << "\n";
-				do
-				{
-					cout << "Enter row(1-10) and column(A-J) - '1a': ";
-					cin >> row >> col; 
-					col = toupper(col);
-				} while (row<1 || row>10 || col < 'A' || col>'J');
-				cout << "Horizontal?\n\033[32m1.YES \033[0m/\033[31m 2.NO\033[0m\n";
-				cin >> choice;
-				switch (choice)
-				{
-				case 1:
-					horizontal = true;
-					break;
-				case 2:
-					horizontal = false;
-					break;
-				default:
-					cout << "Horizontal?\n1.YES / 2.NO\n";
-					break; // continue;
-				}
-				playerShips[i]->placeShip(row, col - 64, playerShips[i], &playerBoard, horizontal);
-			}
+		bool exitMenu = false;
+		bool exitSubMenu = false;
+
+		while (exitMenu != true)
+		{
+			srand(time(nullptr)); // to generate new boards every time
 			system("cls");
+			cout << playerBoard;
+			cout << "1. \033[1;33mPlace your ships randomly\033[0m\n2. \033[1;33mPlace the ships yourself\033[0m\nEnter your choice: ";
+			cin >> choice;
+			switch (choice)
+			{
+			case 1:
+
+				// random board generation
+				for (int i = 0; i < playerShips.size(); i++) {
+					while (playerShips[i]->getPlacedStatus() != true) {
+						row = rand() % 10;
+						col = rand() % 10;
+						horizontal = rand() % 2 == 0;
+						playerShips[i]->placeShip(row + 1, col + 1, playerShips[i], &playerBoard, horizontal);
+					}
+				}
+				//
+
+				while (exitSubMenu!=true)
+				{
+					system("cls");
+					cout << playerBoard;
+					cout << "What do you want to do next?\n1. \033[1;33mRegenerate Board\033[0m\n2. \033[1;33mKeep and Play\033[0m\nEnter your choice: ";
+					cin >> choice;
+					switch (choice)
+					{
+					case 1:
+						// clear system
+						for (auto ship : playerShips) {
+							ship->setPlacedStatus(false);
+						}
+						playerBoard.clearShipsCounter();
+						playerBoard.clearGrid();
+						//
+
+						// random board generation
+						for (int i = 0; i < playerShips.size(); i++) {
+							while (playerShips[i]->getPlacedStatus() != true) {
+								row = rand() % 10;
+								col = rand() % 10;
+								horizontal = rand() % 2 == 0;
+								playerShips[i]->placeShip(row + 1, col + 1, playerShips[i], &playerBoard, horizontal);
+							}
+						}
+						//
+						break;
+					case 2:
+						exitMenu = true;
+						exitSubMenu = true;
+					default:
+						break;
+					}
+				}
+				break;
+			case 2:
+				// clear system
+				for (auto ship : playerShips) {
+					ship->setPlacedStatus(false);
+				}
+				playerBoard.clearShipsCounter();
+				playerBoard.clearGrid();
+				//
+
+				for (int i = 0; i < playerShips.size(); i++) {
+					system("cls");
+					cout << playerBoard;
+					while (playerShips[i]->getPlacedStatus() != true)
+					{
+						cout << "Place your " << playerShips[i]->getShipType() << "(\033[32m" << playerShips[i]->getShipSize() << "\033[0m)\n" << "\n";
+						do
+						{
+							cout << "Enter row(1-10) and column(A-J) - '1a': ";
+							cin >> row >> col;
+							col = toupper(col);
+						} while (row < 1 || row>10 || col < 'A' || col>'J');
+						cout << "Horizontal?\n\033[32m1.YES \033[0m/\033[31m 2.NO\033[0m\n";
+						cin >> choice;
+						switch (choice)
+						{
+						case 1:
+							horizontal = true;
+							break;
+						case 2:
+							horizontal = false;
+							break;
+						default:
+							cout << "Horizontal?\n1.YES / 2.NO\n";
+							break; // continue;
+						}
+						playerShips[i]->placeShip(row, col - 64, playerShips[i], &playerBoard, horizontal);
+					}
+				}
+				exitMenu = true;
+				break;
+			default:
+				cout << "Invalid choice. Enter your choice (1-2): ";
+				break;
+			}
 		}
+
+		system("cls");
+
 
 		// bot board generator
 		botBoard.setEnemyStatus(&botBoard);
@@ -109,8 +188,8 @@ void Game::Play(bool isLoadPlay) {
 		cout << "\033[1m\033[1;36m======================================================\n";
 		cout << "Do you want to save your && computer's loadouts?\n";
 		cout << "======================================================\033[0m\n";
-		cout<< "1.\033[32m Yes \033[33m(return to Menu)\033[0m\n2.\033[32m Yes \033[33m(continue the game)\033[0m\n3.\033[31m No \033[33m(return to Menu)\033[0m\n4. \033[31mNo \033[33m(continue the game)\033[0m\nEnter your choise: ";
-		bool exitMenu = false;
+		cout << "1.\033[32m Yes \033[33m(return to Menu)\033[0m\n2.\033[32m Yes \033[33m(continue the game)\033[0m\n3.\033[31m No \033[33m(return to Menu)\033[0m\n4. \033[31mNo \033[33m(continue the game)\033[0m\nEnter your choise: ";
+		exitMenu = false;
 		do
 		{
 			cin >> choice;
