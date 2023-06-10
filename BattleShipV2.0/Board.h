@@ -6,11 +6,11 @@ using namespace std;
 
 #include"Ship.h"
 
-enum class CellStatus { EMPTY, SHIP, HIT, MISS }; // cell stutus
+enum class CellStatus { EMPTY, SHIP, HIT, MISS }; // cell status
 
 class Board {
 private:
-	bool isEnemyBoard; // to detect computers board
+	bool isEnemyBoard; // to detect bot board
 	vector<vector<CellStatus>> grid; // game table R x C
 	vector<Ship*> shipsOnBoard; //active ships on the board
 	int shipsCounter;
@@ -18,8 +18,8 @@ private:
 public:
 	Board(); // constructor 10x10 game table
 	~Board();
-	void setCellStatus(int row, int column, CellStatus status); //
-	CellStatus getCellStatus(int row, int column); //
+	void setCellStatus(int row, int column, CellStatus status);
+	CellStatus getCellStatus(int row, int column);
 	void setEnemyStatus(Board *board);
 	bool getEnemyStatus(Board board);
 	vector<Ship*>& getShipsOnBoard();

@@ -86,7 +86,7 @@ void Game::Play(bool isLoadPlay) {
 						playerShips[i]->placeShip(row + 1, col + 1, playerShips[i], &playerBoard, horizontal);
 					}
 				}
-				//
+				// end of random board generation
 
 				while (exitSubMenu!=true)
 				{
@@ -97,13 +97,13 @@ void Game::Play(bool isLoadPlay) {
 					switch (choice)
 					{
 					case 1:
-						// clear system
+						// board clear system
 						for (auto ship : playerShips) {
 							ship->setPlacedStatus(false);
 						}
 						playerBoard.clearShipsCounter();
 						playerBoard.clearGrid();
-						//
+						// end of board clear system
 
 						// random board generation
 						for (int i = 0; i < playerShips.size(); i++) {
@@ -114,7 +114,8 @@ void Game::Play(bool isLoadPlay) {
 								playerShips[i]->placeShip(row + 1, col + 1, playerShips[i], &playerBoard, horizontal);
 							}
 						}
-						//
+						// end of random board generation
+
 						break;
 					case 2:
 						exitMenu = true;
@@ -125,13 +126,13 @@ void Game::Play(bool isLoadPlay) {
 				}
 				break;
 			case 2:
-				// clear system
+				// board clear system
 				for (auto ship : playerShips) {
 					ship->setPlacedStatus(false);
 				}
 				playerBoard.clearShipsCounter();
 				playerBoard.clearGrid();
-				//
+				// end of board clear system
 
 				for (int i = 0; i < playerShips.size(); i++) {
 					system("cls");
@@ -170,7 +171,7 @@ void Game::Play(bool isLoadPlay) {
 			}
 		}
 
-		system("cls");
+		system("cls"); // console clear after users activity
 
 
 		// bot board generator
@@ -184,7 +185,9 @@ void Game::Play(bool isLoadPlay) {
 				botShips[i]->placeShip(row + 1, col + 1, botShips[i], &botBoard, horizontal);
 			}
 		}
+		// end of bot board generator
 
+		// save system
 		cout << "\033[1m\033[1;36m======================================================\n";
 		cout << "Do you want to save your && computer's loadouts?\n";
 		cout << "======================================================\033[0m\n";
@@ -222,10 +225,10 @@ void Game::Play(bool isLoadPlay) {
 				break;
 			}
 		} while (!exitMenu);
-
+		// end of save system
 	}
 
-	while (true)
+	while (true) // game started
 	{
 		//players moves
 		system("cls");
@@ -287,7 +290,6 @@ void Game::Play(bool isLoadPlay) {
 			}
 		} while (shipHitted != nullptr);
 
-
 		//bots moves
 		do
 		{
@@ -341,6 +343,7 @@ void Game::Play(bool isLoadPlay) {
 				} while (true);
 			}
 		} while (shipHitted != nullptr);
+		//
 
 	}
 }

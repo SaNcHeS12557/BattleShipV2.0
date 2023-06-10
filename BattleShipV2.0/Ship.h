@@ -18,9 +18,8 @@ public:
 	void setCol(Deck* deck, int col);
 	bool setDamagedStatus(bool hit);
 	bool getDamagedStatus();
-
-
 	friend class Board;
+
 };
 
 class Ship : public	Deck
@@ -44,12 +43,11 @@ public:
 	int getShipSize();
 	bool getIsHorizontal();
 	void setHorizontalStatus(bool orientation);
-
-
 	friend class Destroyer;
 	friend class Cruiser;
 	friend class Battleship;
 	friend class Carrier;
+
 };
 
 class Destroyer : public Ship { // (4) cells

@@ -78,8 +78,6 @@ Ship* Board::hit(int row, int col) {
 	// I lost 40 min on this... :(
 	setCellStatus(row, col, CellStatus::MISS);  // update cell status on the board
 	return nullptr; // there are no ships with such row and col coordinates (return nullptr)
-
-
 }
 
 int Board::getShipsCounter() {
